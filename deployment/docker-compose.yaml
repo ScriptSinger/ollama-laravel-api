@@ -1,0 +1,38 @@
+services:
+  llama:
+    image: ollama/ollama:0.11.3
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  php:
+    build:
+      context: ./php
+      dockerfile: php.dockerfile
+
+    volumes:
+      - ../backend:/var/www/html
+
+  composer:
+    build:
+      context: ./composer
+      dockerfile: composer.dockerfile
+
+    volumes:
+      - ../backend:/var/www/html
+    working_dir: /var/www/html
+
+  nginx:
+    image: nginx:1.25-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../backend/public:/var/www/html/public # Подключаем публичную папку Laravel
+    depends_on:
+      - php
+
+volumes:
+  ollama_data:
