@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'mistral' => [
+        'url' => env('MISTRAL_API_URL'),
+        'model' => env('MISTRAL_MODEL'),
+    ],
+
 ];
