@@ -2,14 +2,25 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Services\MistralService;
 
-Route::post('/mistral/query', function (Request $request, MistralService $mistral) {
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
+
+// routes/api.php
+Route::get('/test', function () {
+    return response()->json(['status' => 'ok']);
+});
+
+
+Route::post('/test-post', function (Request $request) {
     $request->validate([
         'prompt' => 'required|string|max:2000',
     ]);
 
     return response()->json([
-        'result' => $mistral->generate($request->input('prompt')),
+        'message' => 'POST-запрос успешно принят',
+        'received_prompt' => $request->input('prompt'),
+        'status' => 'ok',
     ]);
 });
