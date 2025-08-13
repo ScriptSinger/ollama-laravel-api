@@ -38,7 +38,7 @@ async function fetchData() {
   try {
     const { data } = await getUsers()
     users.value = data.data || []
-  } catch (error) {
+  } catch (err) {
     error.value = 'Не удалось загрузить пользователей'
   } finally {
     loading.value = false

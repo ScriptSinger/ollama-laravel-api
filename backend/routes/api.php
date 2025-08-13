@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -12,6 +13,10 @@ Route::get('/test', function () {
     return response()->json(['status' => 'ok']);
 });
 
+Route::get('/users', function () {
+    $users = User::select('id', 'name', 'email')->get();
+    return response()->json(['data' => $users]);
+});
 
 Route::post('/test-post', function (Request $request) {
     $request->validate([
