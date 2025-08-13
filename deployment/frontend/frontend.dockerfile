@@ -7,7 +7,7 @@ ARG GID=1000
 WORKDIR /app
 
 # Копируем package.json и lock
-COPY ./frontend/package*.json ./
+COPY ./admin-one-vue-tailwind/package*.json ./
 
 # Устанавливаем зависимости от root (npm install может требовать прав)
 RUN npm install -g npm@11.5.2
@@ -20,6 +20,6 @@ RUN usermod -u $UID node && groupmod -g $GID node \
 USER node
 
 # Копируем остальной код
-COPY ./frontend .
+COPY ./admin-one-vue-tailwind .
 
 CMD ["npm", "run", "dev", "--", "--host"]
