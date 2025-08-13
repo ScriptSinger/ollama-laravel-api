@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,6 @@ Route::post('/test-post', function (Request $request) {
         'status' => 'ok',
     ]);
 });
+
+
+Route::apiResource('users', UserController::class);
