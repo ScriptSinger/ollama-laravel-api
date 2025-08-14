@@ -9,7 +9,7 @@ class Log extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['session_id', 'request_payload', 'response_payload'];
+    protected $fillable = ['chat_session_id', 'request_payload', 'response_payload'];
 
     protected $casts = [
         'request_payload' => 'array',

@@ -35,9 +35,14 @@ return [
         ],
     ],
 
-    'mistral' => [
-        'url' => env('MISTRAL_API_URL'),
-        'model' => env('MISTRAL_MODEL'),
+    // 'mistral' => [
+    //     'url' => env('MISTRAL_API_URL'),
+    //     'model' => env('MISTRAL_MODEL'),
+    // ],
+
+    'ollama' => [
+        'base_url' => env('OLLAMA_BASE_URL', 'http://localhost:11434'),
+        'model' => env('OLLAMA_MODEL', 'mistral')
     ],
 
 ];
