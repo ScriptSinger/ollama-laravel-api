@@ -1,5 +1,5 @@
 import apiClient from './apiClient'
 
 export function getUsers() {
-  return apiClient.get('/users')
+  return apiClient.get('/api/users')
 }

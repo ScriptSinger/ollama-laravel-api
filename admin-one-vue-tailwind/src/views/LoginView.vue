@@ -11,6 +11,9 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseButtons from '@/components/BaseButtons.vue'
 import LayoutGuest from '@/layouts/LayoutGuest.vue'
 
+// auth API
+import { login } from '@/services/auth' // login делает csrf-cookie + post /login
+
 const form = reactive({
   login: 'john.doe',
   pass: 'highly-secure-password-fYjUw-',
@@ -19,8 +22,14 @@ const form = reactive({
 
 const router = useRouter()
 
-const submit = () => {
-  router.push('/dashboard')
+const submit = async () => {
+  try {
+    await login(form.login, form.pass)
+    router.push('/dashboard')
+  } catch (error) {
+    console.error('Ошибка входа:', error.response?.data || error.message)
+    alert('Неверный логин или пароль')
+  }
 }
 </script>
 

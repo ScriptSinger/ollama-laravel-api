@@ -5,6 +5,9 @@ import AsideMenuList from '@/components/AsideMenuList.vue'
 import AsideMenuItem from '@/components/AsideMenuItem.vue'
 import BaseIcon from '@/components/BaseIcon.vue'
 
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+
 defineProps({
   menu: {
     type: Array,
@@ -14,6 +17,9 @@ defineProps({
 
 const emit = defineEmits(['menu-click', 'aside-lg-close-click'])
 
+const router = useRouter()
+const auth = useAuthStore()
+
 const logoutItem = computed(() => ({
   label: 'Logout',
   icon: mdiLogout,
@@ -21,13 +27,29 @@ const logoutItem = computed(() => ({
   isLogout: true,
 }))
 
-const menuClick = (event, item) => {
+// обработчик кликов по меню
+const menuClick = async (event, item) => {
   emit('menu-click', event, item)
+
+  // если это logout, вызываем store.logout и редирект
+  if (item.isLogout) {
+    await auth.logout()
+    router.push('/login')
+  }
 }
 
+// обработчик закрытия sidebar
 const asideLgCloseClick = (event) => {
   emit('aside-lg-close-click', event)
 }
+
+// const menuClick = (event, item) => {
+//   emit('menu-click', event, item)
+// }
+
+// const asideLgCloseClick = (event) => {
+//   emit('aside-lg-close-click', event)
+// }
 </script>
 
 <template>
