@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import axios from 'axios'
+import apiClient from '@/services/apiClient' // Import the configured apiClient
 
 export const useMainStore = defineStore('main', () => {
   const userName = ref('John Doe')
@@ -17,6 +18,7 @@ export const useMainStore = defineStore('main', () => {
   const isFieldFocusRegistered = ref(false)
 
   const clients = ref([])
+  const users = ref([])
   const history = ref([])
 
   function setUser(payload) {
@@ -33,6 +35,18 @@ export const useMainStore = defineStore('main', () => {
       .get(`data-sources/clients.json?v=3`)
       .then((result) => {
         clients.value = result?.data?.data
+      })
+      .catch((error) => {
+        alert(error.message)
+      })
+  }
+
+  function fetchSampleUsers() {
+    apiClient
+      .get(`/api/users`) // Use the apiClient to make the request
+      .then((result) => {
+        // alert(result)
+        users.value = result.data
       })
       .catch((error) => {
         alert(error.message)
@@ -56,9 +70,11 @@ export const useMainStore = defineStore('main', () => {
     userAvatar,
     isFieldFocusRegistered,
     clients,
+    users,
     history,
     setUser,
     fetchSampleClients,
+    fetchSampleUsers,
     fetchSampleHistory,
   }
 })
