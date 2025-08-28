@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('chat_sessions', function (Blueprint $table) {
             $table->id();
+            $table->string('title')->nullable(); // тема сессии, генерируется AI
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->timestamp('started_at')->useCurrent();
             $table->timestamp('ended_at')->nullable();

@@ -42,7 +42,8 @@ return [
 
     'ollama' => [
         'base_url' => env('OLLAMA_BASE_URL', 'http://localhost:11434'),
-        'model' => env('OLLAMA_MODEL', 'mistral')
+        'model' => env('OLLAMA_MODEL', 'mistral'),
+        'timeout'  => env('OLLAMA_TIMEOUT', 30), // по умолчанию 30 секунд
     ],
 
 ];

@@ -11,6 +11,7 @@ class ChatSession extends Model
 
     protected $fillable = [
         'user_id',
+        'title',
         'started_at',
         'ended_at',
         'status'

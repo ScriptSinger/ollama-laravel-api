@@ -18,7 +18,8 @@ class ChatSessionController extends Controller
     {
         $session = ChatSession::create([
             'user_id' => Auth::id(),
-            'status' => 'active'
+            'status' => 'active',
+            'title'   => null, // временно, будет обновлено AI
         ]);
         return response()->json($session, 201);
     }

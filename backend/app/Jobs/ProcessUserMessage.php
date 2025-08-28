@@ -35,7 +35,19 @@ class ProcessUserMessage implements ShouldQueue
         $session = ChatSession::findOrFail($userMessage->chat_session_id);
 
         try {
-            $aiResponse = $ai->chat($session, $userMessage->content);
+            // История сообщений (user + ai) в этой сессии
+            $history = $session->messages()
+                ->where('id', '<', $userMessage->id)
+                ->orderBy('id')
+                ->get(['sender_type', 'content'])
+                ->map(fn($m) => [
+                    'role' => $m->sender_type === 'user' ? 'user' : 'assistant',
+                    'content' => $m->content,
+                ])
+                ->toArray();
+
+            // Отправляем запрос в AI
+            $aiResponse = $ai->sendChatMessage($userMessage->content, $history);
 
             $logger->log($session, $ai->getLastRequest(), $aiResponse);
 
@@ -43,10 +55,16 @@ class ProcessUserMessage implements ShouldQueue
                 'chat_session_id' => $session->id,
                 'sender_type'     => 'ai',
                 'content'         => $aiResponse['message']['content'] ?? '',
-                'status'          => 'completed'
+                'status'          => 'completed',
             ]);
 
             $userMessage->update(['status' => 'completed']);
+
+            // Если у сессии нет заголовка — генерируем его по первому сообщению
+            if (empty($session->title)) {
+                $title = $ai->generateTitle($userMessage->content);
+                $session->update(['title' => $title ?? 'Untitled']);
+            }
         } catch (\Throwable $e) {
             $userMessage->update(['status' => 'failed']);
             throw $e;

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMessageRequest;
 use App\Jobs\ProcessUserMessage;
 use App\Models\Message;
-use App\Services\ChatMessageService;
+
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,12 +14,6 @@ use Illuminate\Http\Request;
 class MessageController extends Controller
 {
 
-    protected ChatMessageService $chatService;
-
-    public function __construct(ChatMessageService $chatService)
-    {
-        $this->chatService = $chatService;
-    }
 
     public function store(StoreMessageRequest $request): JsonResponse
     {
