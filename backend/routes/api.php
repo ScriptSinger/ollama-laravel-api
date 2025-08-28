@@ -19,11 +19,7 @@ Route::apiResource('users', UserController::class);
 
 
 Route::middleware(['auth:sanctum'])->apiResource('chat-sessions', ChatSessionController::class);
-
-
-
-Route::apiResource('messages', MessageController::class);
-// ->only(['store', 'show']);
+Route::apiResource('messages', MessageController::class)->only(['store', 'show']);
 
 
 Route::get('settings', [SettingController::class, 'index']);

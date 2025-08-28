@@ -55,18 +55,6 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
-  # frontend:
-  #   build:
-  #     context: ../
-  #     dockerfile: deployment/frontend/frontend.dockerfile
-  #   ports:
-  #     - "5173:5173"
-  #   volumes:
-  #     - ../frontend:/app
-  #     # - /app/node_modules # node_modules не затирается volume-ом
-  #   working_dir: /app
-  #   command: npm run dev -- --host
-
   admin-one-vue-tailwind:
     build:
       context: ../
@@ -78,6 +66,41 @@ services:
     working_dir: /app
     command: npm run dev -- --host
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  queue-worker:
+    build:
+      context: ../backend
+      dockerfile: ../deployment/php/php.dockerfile
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ../backend:/var/www/html
+
+    command: >
+      php artisan queue:work redis
+       --queue=ai
+       --sleep=1
+       --tries=3
+       --timeout=90
+       --verbose
+
+    restart: unless-stopped
+
 volumes:
   ollama_data:
   mysql_data:
+  redis_data:

@@ -6,7 +6,7 @@ ARG GID=1000
 RUN echo "📦 UID: ${UID}, GID: ${GID}"
 
 # Установка системных зависимостей и библиотек
-RUN apk add --no-cache \
+RUN apk add --no-cache $PHPIZE_DEPS \
     icu-dev \
     libzip-dev \
     oniguruma-dev \
@@ -18,6 +18,16 @@ RUN apk add --no-cache \
     shadow \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl pdo_mysql zip
+
+# PHP-расширения Laravel + Redis
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-install intl pdo_mysql zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis
+
+# Чистим build-зависимости
+RUN apk del $PHPIZE_DEPS \
+    && rm -rf /tmp/pear /var/cache/apk/*
 
 # Установка Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
