@@ -14,6 +14,16 @@ use Illuminate\Http\Request;
 class MessageController extends Controller
 {
 
+    public function indexBySession($chatSessionId)
+    {
+
+        $messages = Message::where('chat_session_id', $chatSessionId)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return response()->json($messages);
+    }
+
 
     public function store(StoreMessageRequest $request): JsonResponse
     {

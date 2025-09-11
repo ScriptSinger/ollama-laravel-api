@@ -11,6 +11,7 @@ import {
   mdiResponsive,
   mdiPalette,
   mdiReact,
+  mdiChatOutline,
 } from '@mdi/js'
 
 export default [
@@ -76,6 +77,13 @@ export default [
       },
     ],
   },
+
+  {
+    label: 'Чаты',
+    icon: mdiChatOutline,
+    menu: [], // сюда будут подставляться сессии
+  },
+
   {
     href: 'https://github.com/justboil/admin-one-vue-tailwind',
     label: 'GitHub',

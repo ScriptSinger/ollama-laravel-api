@@ -82,6 +82,23 @@ const routes = [
     name: 'Users',
     component: () => import('@/views/UsersView.vue'),
   },
+
+  {
+    meta: {
+      title: 'Chat session',
+    },
+    path: '/sessions',
+    name: 'sessions',
+    component: () => import('@/views/SessionsView.vue'),
+  },
+
+  {
+    path: '/sessions/:id',
+    name: 'session',
+    meta: { title: 'Chat session' },
+    component: () => import('@/views/ChatView.vue'),
+    props: true,
+  },
 ]
 
 const router = createRouter({

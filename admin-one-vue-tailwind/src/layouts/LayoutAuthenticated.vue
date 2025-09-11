@@ -1,6 +1,6 @@
 <script setup>
 import { mdiForwardburger, mdiBackburger, mdiMenu } from '@mdi/js'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import menuAside from '@/menuAside.js'
 import menuNavBar from '@/menuNavBar.js'
@@ -11,6 +11,12 @@ import NavBar from '@/components/NavBar.vue'
 import NavBarItemPlain from '@/components/NavBarItemPlain.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
+
+import { reactive, watchEffect } from 'vue'
+
+import { useChatSessionsStore } from '@/stores/chatSessions'
+import ChatInput from '@/components/ChatInput.vue'
+import ChatInputControl from '@/components/Chats/ChatInputControl.vue'
 
 const layoutAsidePadding = 'xl:pl-60'
 
@@ -35,6 +41,26 @@ const menuClick = (event, item) => {
     //
   }
 }
+
+const chatStore = useChatSessionsStore()
+
+const menu = reactive([...menuAside])
+
+onMounted(async () => {
+  await chatStore.fetchSessions()
+})
+
+// динамически подставляем сессии
+watchEffect(() => {
+  const chatsMenu = menu.find((i) => i.label === 'Чаты')
+  if (chatsMenu) {
+    chatsMenu.menu = chatStore.sessions.map((s) => ({
+      label: s.title ? s.title : `Сессия #${s.id}`, // fallback если title пустой
+      to: `/sessions/${s.id}`,
+    }))
+    console.log('Menu:', JSON.stringify(menu, null, 2))
+  }
+})
 </script>
 
 <template>
@@ -79,6 +105,12 @@ const menuClick = (event, item) => {
           >Premium version</a
         >
       </FooterBar>
+      <ChatInput
+        :class="[layoutAsidePadding, { 'ml-60 lg:ml-0': isAsideMobileExpanded }]"
+        @send="chatStore.sendMessage"
+      >
+        <ChatInputControl></ChatInputControl>
+      </ChatInput>
     </div>
   </div>
 </template>
