@@ -11,12 +11,8 @@ import NavBar from '@/components/NavBar.vue'
 import NavBarItemPlain from '@/components/NavBarItemPlain.vue'
 import AsideMenu from '@/components/AsideMenu.vue'
 import FooterBar from '@/components/FooterBar.vue'
-
 import { reactive, watchEffect } from 'vue'
-
 import { useChatSessionsStore } from '@/stores/chatSessions'
-import ChatInput from '@/components/ChatInput.vue'
-import ChatInputControl from '@/components/Chats/ChatInputControl.vue'
 
 const layoutAsidePadding = 'xl:pl-60'
 
@@ -58,7 +54,6 @@ watchEffect(() => {
       label: s.title ? s.title : `Сессия #${s.id}`, // fallback если title пустой
       to: `/sessions/${s.id}`,
     }))
-    console.log('Menu:', JSON.stringify(menu, null, 2))
   }
 })
 </script>
@@ -105,12 +100,6 @@ watchEffect(() => {
           >Premium version</a
         >
       </FooterBar>
-      <ChatInput
-        :class="[layoutAsidePadding, { 'ml-60 lg:ml-0': isAsideMobileExpanded }]"
-        @send="chatStore.sendMessage"
-      >
-        <ChatInputControl></ChatInputControl>
-      </ChatInput>
     </div>
   </div>
 </template>

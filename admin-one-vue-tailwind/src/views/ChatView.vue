@@ -8,6 +8,10 @@ import { useChatSessionsStore } from '@/stores/chatSessions'
 import CardBox from '@/components/CardBox.vue'
 import LayoutAuthenticated from '@/layouts/LayoutAuthenticated.vue'
 import SectionTitleLineWithButton from '@/components/SectionTitleLineWithButton.vue'
+import ChatInputBar from '@/components/Chats/ChatInputBar.vue'
+import MessageInput from '@/components/Chats/MessageInput.vue'
+
+const layoutAsidePadding = 'xl:pl-60'
 
 const route = useRoute()
 const chatSessionsStore = useChatSessionsStore()
@@ -51,6 +55,13 @@ watch(
           </div>
         </div>
       </CardBox>
+
+      <ChatInputBar :class="layoutAsidePadding">
+        <MessageInput
+          :chatSessionId="Number(route.params.id)"
+          @send="chatSessionsStore.sendMessage"
+        />
+      </ChatInputBar>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
