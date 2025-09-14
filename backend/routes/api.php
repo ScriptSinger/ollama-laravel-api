@@ -23,9 +23,9 @@ Route::apiResource('messages', MessageController::class)->only(['store', 'show']
 Route::get('chat-sessions/{chat_session}/messages', [MessageController::class, 'indexBySession']);
 
 
-
-Route::get('settings', [SettingController::class, 'index']);
-Route::put('settings', [SettingController::class, 'update']);
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/settings', [SettingController::class, 'index']);
+    Route::post('/settings', [SettingController::class, 'update']);
+});
 
 Route::post('ai/generate', [AIController::class, 'generate']);

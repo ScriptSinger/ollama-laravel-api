@@ -99,6 +99,15 @@ const routes = [
     component: () => import('@/views/ChatView.vue'),
     props: true,
   },
+
+  {
+    meta: {
+      title: 'Settings',
+    },
+    path: '/settings',
+    name: 'settings',
+    component: () => import('@/views/ChatSettings.vue'),
+  },
 ]
 
 const router = createRouter({

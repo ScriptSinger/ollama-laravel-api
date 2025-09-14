@@ -1,8 +1,24 @@
 services:
   llama:
     image: ollama/ollama:0.11.3
+    container_name: ollama-llama
     ports:
       - "11434:11434"
+    environment:
+      # Полный контекст модели (максимум, на котором она обучена)
+      - OLLAMA_CTX_PER_SEQ=32768
+      # Квантование для CPU, уменьшает потребление RAM и ускоряет генерацию
+      - OLLAMA_QUANTIZATION=Q4_K_M
+      # Включаем потоковую генерацию (streaming), чтобы ответы приходили сразу по частям
+      - OLLAMA_STREAM=1
+      # Таймауты можно регулировать при необходимости
+      - OLLAMA_TIMEOUT=120
+    deploy:
+      resources:
+        limits:
+          memory: 32g # максимум RAM для контейнера
+        reservations:
+          memory: 16g # минимальный резерв RAM
     volumes:
       - ollama_data:/root/.ollama
 

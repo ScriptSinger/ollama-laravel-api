@@ -45,6 +45,7 @@ export default [
       {
         icon: mdiCogOutline,
         label: 'Settings',
+        to: '/settings',
       },
       {
         icon: mdiEmail,

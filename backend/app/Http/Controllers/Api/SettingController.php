@@ -3,47 +3,36 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SettingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $settings = Setting::where('user_id', Auth::id())->pluck('value', 'key');
+
+        return response()->json($settings);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Обновить или создать настройки текущего пользователя.
      */
-    public function store(Request $request)
+    public function update(Request $request)
     {
-        //
-    }
+        $userId = Auth::id();
+        $data = $request->all();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+        foreach ($data as $key => $value) {
+            Setting::updateOrCreate(
+                ['user_id' => $userId, 'key' => $key],
+                ['value' => $value]
+            );
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+        $updated = Setting::where('user_id', $userId)->pluck('value', 'key');
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json($updated);
     }
 }
